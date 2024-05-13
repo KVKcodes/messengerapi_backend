@@ -1,11 +1,10 @@
 require("dotenv").config();
+import axios from 'axios';
 import request from "request";
 
 let postWebhook = (req, res) => {
   // Parse the request body from the POST
   let body = req.body;
-  console.log(req+"\n-------------\n");
-  console.log(req.body+"\n------uwu------\n");
   // Check the webhook event is from a Page subscription
   if (body.object === "page") {
     // Iterate over each entry - there may be multiple if batched
@@ -16,6 +15,36 @@ let postWebhook = (req, res) => {
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
+      let recipient_psid= webhook_event.recipient.id;
+      let timestamp= webhook_event.timestamp;
+      let mid= webhook_event.message.mid;
+      let text= webhook_event.message.text;
+      let messageObj= webhook_event;
+      let senderType= "client";
+
+      const messageData = {
+        messageId: this.mid,
+        platform: 'Messenger',
+        timestamp: this.timestamp,
+        type: 'txt',
+        text: this.text,
+        messageObj: this.messageObj,
+        senderType: this.senderType,
+        error: {
+          code: '',
+          message: ''
+        }
+      };
+
+      axios.post('https://messenger-backend-reachify2.onrender.com/api/messages', messageData)
+      .then(response => {
+        console.log('Message sent successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error sending message:', error.response.data);
+      });
+
+
       console.log("Sender PSID: " + sender_psid);
 
       // Check if the event is a message or postback and
