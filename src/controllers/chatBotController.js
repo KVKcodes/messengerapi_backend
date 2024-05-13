@@ -23,13 +23,14 @@ let postWebhook = (req, res) => {
       let senderType= "client";
 
       const messageData = {
-        messageId: this.mid,
+        messageId: mid,
         platform: 'Messenger',
-        timestamp: this.timestamp,
+        timestamp: timestamp,
         type: 'txt',
-        text: this.text,
-        messageObj: this.messageObj,
-        senderType: this.senderType,
+        text: text,
+        messageObj: messageObj,
+        senderType: senderType,
+        text: text,
         error: {
           code: '',
           message: ''
